@@ -95,7 +95,15 @@ int main()
             {
                 printf(" ________\n");
                 for(int i=0; i<n_data; i++)
-                    printf("|___%d___| \n",pop(sp));
+                {
+                    if(sp->tos == -1)
+                    {
+                        printf("-> Stack is empty\n");
+                        break;
+                    }
+                    else
+                        printf("|___%d___| \n",pop(sp));
+                }
             }
 
             break;
@@ -104,7 +112,10 @@ int main()
             if(sp->tos == -1)
                 printf("-> Stack is empty\n");
             else
+            {
+                printf(" \n________\n");
                 printf("|__%d__| \n",peek(sp));
+            }
             break;
 
         case 4:
