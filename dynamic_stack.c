@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 typedef struct
 {
     int *ptr;
@@ -10,11 +11,16 @@ typedef struct
 void push(stack *sp, int data)
 {
     if(sp->tos == sp->size -1)
-    {
+    {   /*
+        the initial values that is pushed after the stack is full creates a new   stack that is double the size
+        and the values from old stack is copied onto the new one, but since the initial value was not pushed
+        into the stack it never gets copied and hence i called it a vanishing number*/
+        int vanishing_data = data;
         // creating stack of double the size in case the stack is full and data needs to be stacked.
         int*new_ptr = (int*)malloc(sizeof(int)*sp->size*2);
+        new_ptr[0] = vanishing_data;
         // copying the data into the new stack
-        for(int i=0; i<=sp->tos; i++)
+        for(int i=1; i<=sp->tos-1; i++)
             new_ptr[i] = sp->ptr[i];
         // deallocating the memory occupied by the previous stack that was full
         free(sp->ptr);
@@ -62,7 +68,7 @@ int user_choice()
 }
 int main()
 {
-    stack *sp = create(5);
+    stack *sp = create(10);
     int choice, n_data, value;
     while(1)
     {
