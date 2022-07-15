@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 typedef struct
 {
     int *ptr;
@@ -15,10 +14,8 @@ void push(stack *sp, int data)
         // creating stack of double the size in case the stack is full and data needs to be stacked.
         int*new_ptr = (int*)malloc(sizeof(int)*sp->size*2);
         // copying the data into the new stack
-        for(int i=0; i<sp->size; i++)
-        {
+        for(int i=0; i<=sp->tos; i++)
             new_ptr[i] = sp->ptr[i];
-        }
         // deallocating the memory occupied by the previous stack that was full
         free(sp->ptr);
         // stack pointer pointing to the newly allocated double memory stack
@@ -34,8 +31,6 @@ void push(stack *sp, int data)
 
 int pop(stack *sp)
 {
-    if(sp->ptr[sp->tos] == -1)
-        printf("Stack is empty");
     int data = sp->ptr[sp->tos];
     sp->tos --;
     return data;
@@ -43,14 +38,8 @@ int pop(stack *sp)
 
 int peek(stack *sp)
 {
-    if(sp->ptr[sp->tos]= -1)
-        printf("Stack is empty");
-    else
-    {
-        int data = sp->ptr[sp->tos];
-        return data;
-    }
-
+    int data = sp->ptr[sp->tos];
+    return data;
 }
 
 // creating size of stack
@@ -62,19 +51,62 @@ stack * create(int size)
     sp->size = size;
 }
 
+int user_choice()
+{
+    int task;
+    printf("#--------*--------#\n| Enter: \t  |\n");
+    printf("| [1] to push \t  |\n| [2] to pop \t  |\n| [3] to peek\t  |\n| [4] to exit\t  |");
+    printf("\n#--------*--------#\n");
+    scanf("%d",&task);
+    return task;
+}
 int main()
 {
     stack *sp = create(5);
-    push(sp, 1);
-    push(sp, 2);
-    push(sp, 3);
-    push(sp, 4);
-    push(sp, 5);
-
-    printf("Stack Size : %d\n--------------\n",sp->size);
-    printf(" _____\n");
-    while(sp->tos > -1)
+    int choice, n_data, value;
+    while(1)
     {
-        printf("|__%d__| \n",pop(sp));
+        choice = user_choice();
+        switch(choice)
+        {
+        case 1:
+            printf("\nHow many data do you want to push to the stack? : ");
+            scanf("%d",&n_data);
+            for(int i=0; i<n_data; i++)
+            {
+                printf("Enter number |%d|: ",i+1);
+                scanf("%d",&value);
+                push(sp,value);
+            }
+            printf("\n->Successfully pushed %d data to the stack\n",n_data);
+            break;
+        case 2:
+            printf("\nHow many data do you want to pop from the stack? : ");
+            scanf("%d",&n_data);
+            if(sp->tos == -1)
+                printf("-> Stack is empty\n");
+            else
+            {
+                printf(" ________\n");
+                for(int i=0; i<n_data; i++)
+                    printf("|___%d___| \n",pop(sp));
+            }
+
+            break;
+
+        case 3:
+            if(sp->tos == -1)
+                printf("-> Stack is empty\n");
+            else
+                printf("|__%d__| \n",peek(sp));
+            break;
+
+        case 4:
+            exit(0);
+        }
+
+        printf("\n\t------------------\n\t| Stack Size : %d |\n\t------------------\n\n",sp->size);
     }
+
+    return 0;
 }
